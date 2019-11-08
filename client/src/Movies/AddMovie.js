@@ -30,7 +30,6 @@ export default function AddMovie(props) {
     setStars({...stars, [e.target.name]:e.target.value});
     const starsArray = Object.keys(stars).map((item)=>stars[item])
     setMovie({ ...movie, stars: starsArray });
-    console.log(movie);
   };
 
   return (
@@ -68,7 +67,7 @@ export default function AddMovie(props) {
           <br />
           <input
             required
-            type="number"
+            type="text"
             name="metascore"
             placeholder="Metascore"
             onChange={handleChange}
