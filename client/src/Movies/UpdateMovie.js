@@ -6,27 +6,36 @@ export default function UpdateMovie(props) {
     title: "",
     director: "",
     metascore: 0,
-    stars: ['','','']
+    stars: ["", "", ""]
   });
-  const [stars, setStars] = useState([])
+  const [star1, setStar1] = useState("");
+  const [star2, setStar2] = useState("");
+  const [star3, setStar3] = useState("");
 
   useEffect(() => {
     axios
       .get(`http://localhost:5000/api/movies/${props.match.params.id}`)
       .then(result => {
         setMovie(result.data);
+        setStar1(result.data.stars[0]);
+        setStar2(result.data.stars[1]);
+        setStar3(result.data.stars[2]);
       })
       .catch(error => {
         console.log(error);
       });
   }, [props.match.params.id]);
 
-  const handleSubmit = (e) => {
-      e.preventDefault();
-      axios
+  useEffect(() => {
+    setMovie({ ...movie, stars: [star1, star2, star3] });
+  }, [star1, star2, star3]);
+
+  const handleSubmit = e => {
+    e.preventDefault();
+    axios
       .put(`http://localhost:5000/api/movies/${props.match.params.id}`, movie)
       .then(result => {
-        props.history.push(`/`)
+        props.history.push(`/`);
       })
       .catch(error => {
         console.log(error);
@@ -37,9 +46,11 @@ export default function UpdateMovie(props) {
     setMovie({ ...movie, [e.target.name]: e.target.value });
   };
 
-  const handleChangeStars = e => {
-    setStars({ ...stars, [e.target.name]: e.target.value });
-    setMovie({...movie, stars})
+  const handleChangeStars = (e, index) => {
+    e.target.name === "0" && setStar1(e.target.value);
+    e.target.name === "1" && setStar2(e.target.value);
+    e.target.name === "2" && setStar3(e.target.value);
+    console.log(movie);
   };
 
   return (
@@ -74,7 +85,7 @@ export default function UpdateMovie(props) {
           Metascore
           <br />
           <input
-            type="number"
+            type="text"
             name="metascore"
             placeholder="Metascore"
             onChange={handleChange}
@@ -87,24 +98,24 @@ export default function UpdateMovie(props) {
           <br />
           <input
             type="text"
-            name="stars[]"
+            name="0"
             placeholder="Star 1"
-            onChange={handleChangeStars}
-            value={movie.stars[0]}
+            onChange={e => handleChangeStars(e, 0)}
+            value={star1}
           />
           <input
             type="text"
-            name="stars[]"
-            placeholder="Star 1"
-            onChange={handleChangeStars}
-            value={movie.stars[1]}
+            name="1"
+            placeholder="Star 2"
+            onChange={e => handleChangeStars(e, 0)}
+            value={star2}
           />
           <input
             type="text"
-            name="stars[]"
-            placeholder="Star 1"
-            onChange={handleChangeStars}
-            value={movie.stars[2]}
+            name="2"
+            placeholder="Star 3"
+            onChange={e => handleChangeStars(e, 0)}
+            value={star3}
           />
         </label>
         <br />
