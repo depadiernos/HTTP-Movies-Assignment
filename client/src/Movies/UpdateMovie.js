@@ -6,8 +6,9 @@ export default function UpdateMovie(props) {
     title: "",
     director: "",
     metascore: 0,
-    stars: ["Kurt Russell", "Bill Paxton", "Sam Elliot"]
+    stars: ['','','']
   });
+  const [stars, setStars] = useState([])
 
   useEffect(() => {
     axios
@@ -20,16 +21,26 @@ export default function UpdateMovie(props) {
       });
   }, [props.match.params.id]);
 
-  const handleSubmit = () => {};
+  const handleSubmit = (e) => {
+      e.preventDefault();
+      axios
+      .put(`http://localhost:5000/api/movies/${props.match.params.id}`, movie)
+      .then(result => {
+        props.history.push(`/`)
+      })
+      .catch(error => {
+        console.log(error);
+      });
+  };
 
   const handleChange = e => {
     setMovie({ ...movie, [e.target.name]: e.target.value });
   };
 
   const handleChangeStars = e => {
-    const stars = e.target.value.split(/[,]+/).filter(Boolean)
-    setMovie({ ...movie, [e.target.name]: stars });
-  }
+    setStars({ ...stars, [e.target.name]: e.target.value });
+    setMovie({...movie, stars})
+  };
 
   return (
     <div className="save-wrapper movie-card">
@@ -76,10 +87,24 @@ export default function UpdateMovie(props) {
           <br />
           <input
             type="text"
-            name="stars"
-            placeholder="Starring Actors (comma separate)"
+            name="stars[]"
+            placeholder="Star 1"
             onChange={handleChangeStars}
-            value={movie.stars}
+            value={movie.stars[0]}
+          />
+          <input
+            type="text"
+            name="stars[]"
+            placeholder="Star 1"
+            onChange={handleChangeStars}
+            value={movie.stars[1]}
+          />
+          <input
+            type="text"
+            name="stars[]"
+            placeholder="Star 1"
+            onChange={handleChangeStars}
+            value={movie.stars[2]}
           />
         </label>
         <br />
