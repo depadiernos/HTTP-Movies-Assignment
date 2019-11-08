@@ -27,7 +27,7 @@ export default function UpdateMovie(props) {
   }, [props.match.params.id]);
 
   useEffect(() => {
-    setMovie({ ...movie, stars: [star1, star2, star3] });
+    setMovie(current => {return { ...current, stars: [star1, star2, star3] }});
   }, [star1, star2, star3]);
 
   const handleSubmit = e => {
@@ -50,7 +50,6 @@ export default function UpdateMovie(props) {
     e.target.name === "0" && setStar1(e.target.value);
     e.target.name === "1" && setStar2(e.target.value);
     e.target.name === "2" && setStar3(e.target.value);
-    console.log(movie);
   };
 
   return (
